@@ -8,6 +8,14 @@
 
 import UIKit
 
+extension Selector {
+    static let vcDidBecomeActive = #selector(ViewController.didBecomeActive)
+    static let vcWillEnterForeground = #selector(ViewController.willEnterForeground)
+    static let vcWillResignActive = #selector(ViewController.willResignActive)
+    static let vcDidEnterBackground = #selector(ViewController.didEnterBackground)
+    static let vcWillTerminate = #selector(ViewController.willTerminate)
+}
+
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
@@ -20,8 +28,8 @@ class ViewController: UIViewController {
         setupWillEnterForeground()
         setupDidBecomeActive()
         setupWillResignActive()
-        setupDidEnterBackgroundNotification()
-        setupWillTerminateNotification()
+        setupDidEnterBackground()
+        setupWillTerminate()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -30,48 +38,30 @@ class ViewController: UIViewController {
     
     /// フォアグラウンドになる直前に呼ばれる
     func setupWillEnterForeground() {
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector:#selector(willEnterForeground),
-                                               name: NSNotification.Name.UIApplicationWillEnterForeground,
-                                               object: nil)
+        self.addWillEnterForegroundObserver(self, selector: .vcWillEnterForeground)
     }
 
     /// アクティブになったら呼ばれる
     func setupDidBecomeActive() {
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector:#selector(didBecomeActive),
-        name: NSNotification.Name.UIApplicationDidBecomeActive,
-        object: nil)
+        self.addDidBecomeActiveObserver(self, selector: .vcDidBecomeActive)
     }
     
     /// アクティブでなくなる直前に呼ばれる
-    func setupWillResignActive() {
-
-        NotificationCenter.default.addObserver(self,
-                                               selector:#selector(willResignActive),
-                                               name: NSNotification.Name.UIApplicationWillResignActive,
-                                               object: nil)
+    func setupWillResignActive() {        
+        self.addWillResignActiveObserver(self, selector: .vcWillResignActive)
     }
     
     /// バックグラウンドになったら呼ばれる
-    func setupDidEnterBackgroundNotification() {
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector:#selector(didEnterBackgroundNotification),
-                                               name: NSNotification.Name.UIApplicationDidEnterBackground,                                               object: nil)
+    func setupDidEnterBackground() {
+        self.addDidEnterBackgroundObserver(self, selector: .vcDidEnterBackground)
     }
 
     /// 終了する直前に呼ばれる
-    func setupWillTerminateNotification() {
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector:#selector(willTerminateNotification),
-                                               name: NSNotification.Name.UIApplicationWillTerminate,                                               object: nil)
+    func setupWillTerminate() {
+        self.addWillTerminateObserver(self, selector: .vcWillTerminate)
     }
 
-    /// Callbak
+    /// Callback
     func didBecomeActive() {
         print(#file, #function)
     }
@@ -84,11 +74,11 @@ class ViewController: UIViewController {
         print(#file, #function)
     }
     
-    func didEnterBackgroundNotification() {
+    func didEnterBackground() {
         print(#file, #function)
     }
     
-    func willTerminateNotification() {
+    func willTerminate() {
         print(#file, #function)
     }
     
